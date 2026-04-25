@@ -479,7 +479,7 @@ open dashboard/index.html
 
 ## Built For
 
-[Swiggy Builders Club](https://www.swiggy.com/builders) — Swiggy's open developer program on Food, Instamart, and Dineout MCP infrastructure.
+[Swiggy Builders Club](https://mcp.swiggy.com/builders/) — Swiggy's open developer program on Food, Instamart, and Dineout MCP infrastructure.
 
 *Built by an individual developer from Salem, Tamil Nadu.*  
 *Uses all three Swiggy MCP servers in a single production system.*

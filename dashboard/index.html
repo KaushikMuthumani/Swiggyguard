@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiggyGuard — Customer Retention System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #FF6B35;
+    --orange-light: #FFF0EB;
+    --orange-dark: #C94D1A;
+    --green: #1A9E6A;
+    --green-light: #E8F8F2;
+    --red: #D93025;
+    --red-light: #FEF0EF;
+    --amber: #E07B00;
+    --amber-light: #FFF8E7;
+    --purple: #5B4ECC;
+    --purple-light: #F0EEFF;
+    --bg: #F7F5F2;
+    --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.08);
+    --text: #1A1816;
+    --text-2: #6B6560;
+    --text-3: #9E9790;
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+  }
+
+  .logo span { color: var(--text-2); font-weight: 400; }
+
+  .header-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--green);
+    background: var(--green-light);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .pulse {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  /* ── Layout ── */
+  main { padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+
+  .page-title {
+    margin-bottom: 24px;
+  }
+
+  .page-title h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+  }
+
+  .page-title p {
+    color: var(--text-2);
+    font-size: 14px;
+  }
+
+  /* ── Metric Cards ── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: transform 0.15s;
+  }
+
+  .metric:hover { transform: translateY(-1px); }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .metric-sub {
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .metric.orange .metric-value { color: var(--orange); }
+  .metric.green .metric-value { color: var(--green); }
+  .metric.purple .metric-value { color: var(--purple); }
+  .metric.red .metric-value { color: var(--red); }
+
+  /* ── Grid ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  .card-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--orange-light);
+    color: var(--orange-dark);
+  }
+
+  /* ── Events Feed ── */
+  .events-feed { max-height: 480px; overflow-y: auto; }
+
+  .event-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: start;
+    cursor: pointer;
+    transition: background 0.1s;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .event-item:hover { background: var(--bg); }
+  .event-item:last-child { border-bottom: none; }
+
+  .event-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .dot-critical { background: var(--red); box-shadow: 0 0 0 3px var(--red-light); }
+  .dot-high { background: var(--orange); box-shadow: 0 0 0 3px var(--orange-light); }
+  .dot-medium { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-light); }
+  .dot-low { background: var(--green); box-shadow: 0 0 0 3px var(--green-light); }
+
+  .event-body {}
+  .event-type {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .event-detail {
+    font-size: 12px;
+    color: var(--text-2);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+
+  .event-msg {
+    font-size: 12px;
+    color: var(--text-3);
+    font-style: italic;
+    line-height: 1.4;
+    padding: 6px 10px;
+    background: var(--bg);
+    border-radius: 6px;
+    margin-top: 6px;
+    border-left: 2px solid var(--orange);
+  }
+
+  .event-meta {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .risk-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  .risk-critical { background: var(--red-light); color: var(--red); }
+  .risk-high { background: var(--orange-light); color: var(--orange-dark); }
+  .risk-medium { background: var(--amber-light); color: var(--amber); }
+  .risk-low { background: var(--green-light); color: var(--green); }
+
+  .event-time {
+    font-size: 11px;
+    color: var(--text-3);
+    font-family: var(--mono);
+  }
+
+  /* ── Live Activity Panel ── */
+  .activity-log {
+    padding: 12px 16px;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  .log-line {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .log-line:last-child { border-bottom: none; }
+
+  .log-time {
+    font-family: var(--mono);
+    color: var(--text-3);
+    flex-shrink: 0;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+
+  .log-text { color: var(--text-2); line-height: 1.4; }
+  .log-text strong { color: var(--text); font-weight: 500; }
+  .log-text .ok { color: var(--green); font-weight: 500; }
+  .log-text .warn { color: var(--orange); font-weight: 500; }
+  .log-text .crit { color: var(--red); font-weight: 500; }
+
+  /* ── Demo Scenario Controls ── */
+  .demo-controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .demo-controls h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+  }
+
+  .scenario-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .scenario-btn {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    font-family: var(--font);
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .scenario-btn:hover {
+    border-color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .scenario-btn.active {
+    border-color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .scenario-icon { font-size: 18px; margin-bottom: 4px; }
+  .scenario-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .scenario-desc { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
+  /* ── WhatsApp preview ── */
+  .whatsapp-preview {
+    background: #E5DDD5;
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .whatsapp-preview.show { display: block; }
+
+  .wa-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .wa-avatar {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .wa-name { font-size: 14px; font-weight: 600; }
+  .wa-status { font-size: 12px; color: var(--text-2); }
+
+  .wa-bubble {
+    background: white;
+    border-radius: 0 8px 8px 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 85%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+    animation: bubbleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes bubbleIn {
+    from { opacity: 0; transform: scale(0.85) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .wa-time {
+    font-size: 11px;
+    color: var(--text-3);
+    text-align: right;
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+
+  /* ── Retention bar ── */
+  .retention-bar-wrap {
+    margin-top: 12px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-2);
+    margin-bottom: 6px;
+  }
+
+  .bar-label strong { color: var(--text); }
+
+  .bar-track {
+    height: 6px;
+    background: var(--bg);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-3);
+    font-size: 12px;
+  }
+
+  footer a { color: var(--orange); text-decoration: none; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    main { padding: 16px; }
+    header { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🛡️</div>
+    SwiggyGuard <span>&nbsp;/ Retention System</span>
+  </div>
+  <div class="header-status">
+    <div class="pulse"></div>
+    Agent running
+  </div>
+</header>
+
+<main>
+  <div class="page-title">
+    <h1>Customer Retention Dashboard</h1>
+    <p>Real-time monitoring · AI-powered recovery · Cross-vertical action</p>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics">
+    <div class="metric orange">
+      <div class="metric-label">Events Detected</div>
+      <div class="metric-value" id="m-events">—</div>
+      <div class="metric-sub">bad experience signals</div>
+    </div>
+    <div class="metric red">
+      <div class="metric-label">Messages Sent</div>
+      <div class="metric-value" id="m-messages">—</div>
+      <div class="metric-sub">WhatsApp recoveries</div>
+    </div>
+    <div class="metric green">
+      <div class="metric-label">Customers Retained</div>
+      <div class="metric-value" id="m-retained">—</div>
+      <div class="metric-sub">ordered again after recovery</div>
+    </div>
+    <div class="metric purple">
+      <div class="metric-label">Retention Rate</div>
+      <div class="metric-value" id="m-rate">—</div>
+      <div class="metric-sub">of recovered customers</div>
+    </div>
+  </div>
+
+  <!-- Demo Scenarios -->
+  <div class="demo-controls">
+    <h3>Demo scenarios — trigger a live event</h3>
+    <div class="scenario-buttons">
+      <button class="scenario-btn" onclick="triggerDemo('wrong_item')">
+        <span class="scenario-icon">🍱</span>
+        <span class="scenario-name">Wrong Item</span>
+        <span class="scenario-desc">Biryani ordered, pulao delivered. ₹380 order, ₹30 refund.</span>
+      </button>
+      <button class="scenario-btn" onclick="triggerDemo('eta_breach')">
+        <span class="scenario-icon">⏱️</span>
+        <span class="scenario-name">52-Min Delay</span>
+        <span class="scenario-desc">Promised 25 min, arrived 77 min. Silent failure.</span>
+      </button>
+      <button class="scenario-btn" onclick="triggerDemo('low_rating')">
+        <span class="scenario-icon">⭐</span>
+        <span class="scenario-name">1-Star Rating</span>
+        <span class="scenario-desc">Tier 1 customer leaves a 1-star review.</span>
+      </button>
+      <button class="scenario-btn" onclick="triggerDemo('cross_vertical')">
+        <span class="scenario-icon">🍽️</span>
+        <span class="scenario-name">Cross-Vertical</span>
+        <span class="scenario-desc">Food failure → Dineout table recovery.</span>
+      </button>
+    </div>
+
+    <!-- WhatsApp Preview -->
+    <div class="whatsapp-preview" id="wa-preview">
+      <div class="wa-header">
+        <div class="wa-avatar">SW</div>
+        <div>
+          <div class="wa-name">Swiggy Support</div>
+          <div class="wa-status">online</div>
+        </div>
+      </div>
+      <div class="wa-bubble" id="wa-message">...</div>
+      <div class="wa-time" id="wa-time">now</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid-2">
+
+    <!-- Events Feed -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Live event feed</span>
+        <span class="card-badge" id="event-count">0 events</span>
+      </div>
+      <div class="events-feed" id="events-feed">
+        <div style="padding:40px;text-align:center;color:var(--text-3)">
+          <div style="font-size:24px;margin-bottom:8px">📡</div>
+          <div>Waiting for events...</div>
+          <div style="font-size:12px;margin-top:4px">Trigger a demo scenario above</div>
+        </div>
+      </div>
+      <div class="retention-bar-wrap">
+        <div class="bar-label">
+          <span>Retention rate</span>
+          <strong id="bar-label-val">0%</strong>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill" id="retention-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Log -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Agent log</span>
+      </div>
+      <div class="activity-log" id="activity-log">
+        <div class="log-line">
+          <span class="log-time">00:00</span>
+          <span class="log-text"><strong>SwiggyGuard</strong> initialised</span>
+        </div>
+        <div class="log-line">
+          <span class="log-time">00:01</span>
+          <span class="log-text">Connected to <strong>Food MCP</strong>, <strong>Instamart MCP</strong>, <strong>Dineout MCP</strong></span>
+        </div>
+        <div class="log-line">
+          <span class="log-time">00:02</span>
+          <span class="log-text"><span class="ok">●</span> Polling every 2 minutes</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  Built for <a href="#">Swiggy Builders Club</a> · SwiggyGuard v1.0 · Uses Swiggy Food, Instamart & Dineout MCP
+</footer>
+
+<script>
+const DEMO_EVENTS = {
+  wrong_item: {
+    type: "WRONG_ITEM",
+    customer: "Priya S.",
+    detail: "Biryani ordered → Pulao delivered. Refund: ₹30 of ₹380.",
+    risk: "Critical",
+    tier: "Tier 1 · 22 orders · ₹18,400 spend",
+    message: "Priya, you ordered biryani and got something completely different — that's on us, not you. We've refunded the full ₹380 and added ₹200 to your Swiggy wallet. We're sorry this happened. 🧡",
+    action: "Full refund + ₹200 wallet credit"
+  },
+  eta_breach: {
+    type: "ETA_BREACH",
+    customer: "Rahul M.",
+    detail: "Promised 25 min → Delivered 77 min. Silent breach, no complaint.",
+    risk: "High",
+    tier: "Tier 2 · 11 orders · ₹7,200 spend",
+    message: "Rahul, your order took 52 minutes longer than we promised. No excuse — that's not the experience you paid for. We've added free priority delivery on your next 3 orders. It's the least we can do.",
+    action: "Priority delivery × 3 orders"
+  },
+  low_rating: {
+    type: "LOW_RATING",
+    customer: "Meera K.",
+    detail: "1-star rating submitted after delivery. No complaint filed.",
+    risk: "High",
+    tier: "Tier 1 · 34 orders · ₹24,600 spend",
+    message: "Meera, we saw your rating and we take it seriously. We don't know exactly what went wrong, but we know something did. Can we make it right? We've booked a table for two at The Fatty Bao this weekend — our treat.",
+    action: "Dineout table — cross-vertical recovery"
+  },
+  cross_vertical: {
+    type: "WRONG_ITEM",
+    customer: "Arjun T.",
+    detail: "Wrong order + bad refund. Tier 1 customer at critical churn risk.",
+    risk: "Critical",
+    tier: "Tier 1 · 45 orders · ₹38,000 spend",
+    message: "Arjun, tonight was a failure on our end — wrong item, terrible refund, no excuse. We've processed a full refund and we've arranged a complimentary dinner for two at Peshawri ITC this Saturday. This isn't just a coupon. It's an apology.",
+    action: "Full refund + Dineout booking (Peshawri)"
+  }
+};
+
+let eventCount = 0;
+let retained = 0;
+let startTime = Date.now();
+
+function now() {
+  const s = Math.floor((Date.now() - startTime) / 1000);
+  return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+}
+
+function riskClass(r) {
+  return r.toLowerCase();
+}
+
+function addLog(text) {
+  const log = document.getElementById('activity-log');
+  const div = document.createElement('div');
+  div.className = 'log-line';
+  div.innerHTML = `<span class="log-time">${now()}</span><span class="log-text">${text}</span>`;
+  log.prepend(div);
+}
+
+function addEvent(scenario) {
+  const d = DEMO_EVENTS[scenario];
+  eventCount++;
+  const feed = document.getElementById('events-feed');
+
+  // Remove empty state
+  const empty = feed.querySelector('div[style]');
+  if (empty) empty.remove();
+
+  const item = document.createElement('div');
+  item.className = 'event-item';
+  item.innerHTML = `
+    <div class="event-dot dot-${d.risk.toLowerCase()}"></div>
+    <div class="event-body">
+      <div class="event-type">${d.type.replace('_',' ')}</div>
+      <div class="event-detail">${d.customer} · ${d.tier}</div>
+      <div class="event-detail">${d.detail}</div>
+      <div class="event-msg">"${d.message}"</div>
+    </div>
+    <div class="event-meta">
+      <div class="risk-badge risk-${d.risk.toLowerCase()}">${d.risk}</div>
+      <div class="event-time">${now()}</div>
+    </div>
+  `;
+  feed.prepend(item);
+
+  document.getElementById('event-count').textContent = eventCount + ' event' + (eventCount !== 1 ? 's' : '');
+  document.getElementById('m-events').textContent = eventCount;
+  document.getElementById('m-messages').textContent = eventCount;
+
+  // Simulate retention after 3 seconds
+  setTimeout(() => {
+    retained++;
+    const rate = Math.round((retained / eventCount) * 100);
+    document.getElementById('m-retained').textContent = retained;
+    document.getElementById('m-rate').textContent = rate + '%';
+    document.getElementById('retention-bar').style.width = rate + '%';
+    document.getElementById('bar-label-val').textContent = rate + '%';
+    addLog(`<span class="ok">✓ Retained</span> · ${d.customer} placed next order`);
+  }, 3200);
+}
+
+function triggerDemo(scenario) {
+  const d = DEMO_EVENTS[scenario];
+
+  // Highlight button
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  // Log sequence
+  addLog(`<span class="warn">⚡ Event detected</span> · ${d.type} · ${d.customer}`);
+
+  setTimeout(() => {
+    addLog(`Claude scoring churn risk · Customer: <strong>${d.tier}</strong>`);
+  }, 600);
+
+  setTimeout(() => {
+    addLog(`<span class="crit">● ${d.risk} risk</span> · Recovery: <strong>${d.action}</strong>`);
+  }, 1400);
+
+  setTimeout(() => {
+    addLog(`WhatsApp message generated · Sending via Twilio...`);
+    showWhatsApp(d.message);
+  }, 2000);
+
+  setTimeout(() => {
+    addLog(`<span class="ok">✓ Message delivered</span> · ${d.customer}`);
+    addEvent(scenario);
+  }, 2600);
+}
+
+function showWhatsApp(message) {
+  const preview = document.getElementById('wa-preview');
+  const msg = document.getElementById('wa-message');
+  const time = document.getElementById('wa-time');
+  preview.classList.remove('show');
+
+  setTimeout(() => {
+    msg.textContent = message;
+    const now = new Date();
+    time.textContent = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+    preview.classList.add('show');
+  }, 100);
+}
+
+// Load real stats if API available
+async function loadStats() {
+  try {
+    const r = await fetch('/api/stats');
+    if (!r.ok) return;
+    const d = await r.json();
+    document.getElementById('m-events').textContent = d.total_events || 0;
+    document.getElementById('m-messages').textContent = d.messages_sent || 0;
+    document.getElementById('m-retained').textContent = d.customers_retained || 0;
+    document.getElementById('m-rate').textContent = (d.retention_rate || 0) + '%';
+    eventCount = d.total_events || 0;
+    retained = d.customers_retained || 0;
+  } catch(e) {
+    // API not running — demo mode is fine
+  }
+}
+
+loadStats();
+setInterval(loadStats, 30000);
+</script>
+</body>
+</html>
